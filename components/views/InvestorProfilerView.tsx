@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { generateInvestorProfiles } from '../../services/geminiService';
+import { generateInvestorProfiles, refineInvestorProfiles } from '../../services/geminiService';
 import type { InvestorProfile } from '../../types';
 import ViewContainer from '../common/ViewContainer';
 import Card from '../common/Card';
@@ -10,6 +9,7 @@ import Loader from '../common/Loader';
 const InvestorProfilerView: React.FC = () => {
   const [projectDescription, setProjectDescription] = useState('');
   const [profiles, setProfiles] = useState<InvestorProfile[] | null>(null);
+  const [feedback, setFeedback] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,6 +21,7 @@ const InvestorProfilerView: React.FC = () => {
     setIsLoading(true);
     setError(null);
     setProfiles(null);
+    setFeedback('');
     try {
       const result = await generateInvestorProfiles(projectDescription);
       setProfiles(result);
@@ -28,6 +29,24 @@ const InvestorProfilerView: React.FC = () => {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleRefine = async () => {
+    if (!feedback.trim() || !profiles) {
+      setError('Please enter feedback to refine the profiles.');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await refineInvestorProfiles(projectDescription, profiles, feedback);
+      setProfiles(result);
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred during refinement.');
+    } finally {
+      setIsLoading(false);
+      setFeedback('');
     }
   };
 
@@ -84,10 +103,35 @@ const InvestorProfilerView: React.FC = () => {
 
       {isLoading && <Card><Loader /></Card>}
 
-      {profiles && (
-         <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-slate-800">Ideal Investor Archetypes</h3>
-            {profiles.map((profile, index) => <ProfileCard key={index} profile={profile} />)}
+      {profiles && !isLoading && (
+         <div className="space-y-8">
+            <div>
+                <h3 className="text-2xl font-semibold text-slate-800 mb-4">Ideal Investor Archetypes</h3>
+                <div className="space-y-6">
+                    {profiles.map((profile, index) => <ProfileCard key={index} profile={profile} />)}
+                </div>
+            </div>
+            <Card>
+                <div className="p-6">
+                    <h3 className="text-lg font-semibold text-slate-700">Refine These Profiles</h3>
+                    <label htmlFor="feedback" className="mt-1 block text-sm text-slate-600">
+                    Want to see different types of investors? Provide feedback and the AI will generate new profiles.
+                    </label>
+                    <textarea
+                        id="feedback"
+                        rows={4}
+                        className="mt-2 block w-full rounded-md border-slate-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
+                        placeholder="e.g., 'Focus more on investors with a background in sustainable technology.' or 'Can you make the crowdfunding backer persona younger?'"
+                        value={feedback}
+                        onChange={(e) => setFeedback(e.target.value)}
+                    />
+                    <div className="mt-4 text-right">
+                        <Button onClick={handleRefine} isLoading={isLoading} disabled={!feedback.trim()}>
+                            Refine Profiles
+                        </Button>
+                    </div>
+                </div>
+            </Card>
          </div>
       )}
     </ViewContainer>

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { generateCampaignStrategy } from '../../services/geminiService';
+import { generateCampaignStrategy, refineCampaignStrategy } from '../../services/geminiService';
 import type { CampaignStrategy } from '../../types';
 import ViewContainer from '../common/ViewContainer';
 import Card from '../common/Card';
@@ -10,6 +9,7 @@ import Loader from '../common/Loader';
 const CampaignStrategistView: React.FC = () => {
   const [projectDescription, setProjectDescription] = useState('');
   const [strategy, setStrategy] = useState<CampaignStrategy | null>(null);
+  const [feedback, setFeedback] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,6 +21,7 @@ const CampaignStrategistView: React.FC = () => {
     setIsLoading(true);
     setError(null);
     setStrategy(null);
+    setFeedback('');
     try {
       const result = await generateCampaignStrategy(projectDescription);
       setStrategy(result);
@@ -28,6 +29,24 @@ const CampaignStrategistView: React.FC = () => {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleRefine = async () => {
+    if (!feedback.trim() || !strategy) {
+      setError('Please enter feedback to refine the strategy.');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await refineCampaignStrategy(projectDescription, strategy, feedback);
+      setStrategy(result);
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred during refinement.');
+    } finally {
+      setIsLoading(false);
+      setFeedback('');
     }
   };
   
@@ -117,10 +136,33 @@ const CampaignStrategistView: React.FC = () => {
 
       {isLoading && <Card><Loader /></Card>}
 
-      {strategy && (
-        <div>
-            <h3 className="text-2xl font-semibold text-slate-800 mb-4">Generated Campaign Strategy</h3>
-            <StrategyDisplay strategy={strategy} />
+      {strategy && !isLoading && (
+        <div className="space-y-8">
+            <div>
+                <h3 className="text-2xl font-semibold text-slate-800 mb-4">Generated Campaign Strategy</h3>
+                <StrategyDisplay strategy={strategy} />
+            </div>
+            <Card>
+                <div className="p-6">
+                    <h3 className="text-lg font-semibold text-slate-700">Refine the Strategy</h3>
+                    <label htmlFor="feedback" className="mt-1 block text-sm text-slate-600">
+                    Provide feedback to tune the branding, audience, or campaign details.
+                    </label>
+                    <textarea
+                        id="feedback"
+                        rows={4}
+                        className="mt-2 block w-full rounded-md border-slate-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
+                        placeholder="e.g., 'The brand name feels a bit too corporate, can we try something more community-focused?' or 'Let's add a reward tier for early-bird backers.'"
+                        value={feedback}
+                        onChange={(e) => setFeedback(e.target.value)}
+                    />
+                    <div className="mt-4 text-right">
+                        <Button onClick={handleRefine} isLoading={isLoading} disabled={!feedback.trim()}>
+                            Refine Strategy
+                        </Button>
+                    </div>
+                </div>
+            </Card>
         </div>
       )}
     </ViewContainer>

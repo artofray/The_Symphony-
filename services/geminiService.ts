@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { InvestorProfile, CampaignStrategy, GrantProposal } from '../types';
 
@@ -22,6 +21,20 @@ export const generateGrantProposal = async (projectDescription: string): Promise
     } catch (error) {
         console.error("Error generating grant proposal:", error);
         throw new Error("Failed to generate grant proposal. Please check the console for details.");
+    }
+};
+
+export const refineGrantProposal = async (projectDescription: string, originalProposal: string, feedback: string): Promise<GrantProposal> => {
+    try {
+        const prompt = `${BASE_PROMPT_PHILOSOPHY}\n\nYou previously generated a grant proposal for a project. Here are the details:\n\n**Original Project Idea:** "${projectDescription}"\n\n**Your First Proposal:**\n---\n${originalProposal}\n---\n\nThe user has provided the following feedback to improve the proposal:\n**User Feedback:** "${feedback}"\n\nPlease generate a new, refined grant proposal that incorporates this feedback while maintaining the core mission and tone.`;
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+        });
+        return response.text;
+    } catch (error) {
+        console.error("Error refining grant proposal:", error);
+        throw new Error("Failed to refine grant proposal.");
     }
 };
 
@@ -54,6 +67,39 @@ export const generateInvestorProfiles = async (projectDescription: string): Prom
     } catch (error) {
         console.error("Error generating investor profiles:", error);
         throw new Error("Failed to generate investor profiles. Please check the console for details.");
+    }
+};
+
+export const refineInvestorProfiles = async (projectDescription: string, originalProfiles: InvestorProfile[], feedback: string): Promise<InvestorProfile[]> => {
+    try {
+        const prompt = `${BASE_PROMPT_PHILOSOPHY}\n\nYou previously generated three investor archetypes for a project. Here are the details:\n\n**Original Project Idea:** "${projectDescription}"\n\n**Your First Profiles:**\n---\n${JSON.stringify(originalProfiles, null, 2)}\n---\n\nThe user has provided the following feedback to improve the profiles:\n**User Feedback:** "${feedback}"\n\nPlease generate a new, refined set of three investor archetypes (Venture Capitalist, Angel Investor, Crowdfunding Backer) that incorporates this feedback.`;
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: {
+                        type: Type.OBJECT,
+                        properties: {
+                            type: { type: Type.STRING, description: "The type of investor (Venture Capitalist, Angel Investor, or Crowdfunding Backer)." },
+                            name: { type: Type.STRING, description: "A representative name for this investor archetype." },
+                            mindset: { type: Type.STRING, description: "The core philosophy and mindset of this investor." },
+                            whyTheyInvest: { type: Type.STRING, description: "What motivates them to invest in a project like this." },
+                            howToApproach: { type: Type.STRING, description: "The best way to communicate and pitch the project to them." },
+                        },
+                        required: ["type", "name", "mindset", "whyTheyInvest", "howToApproach"],
+                    }
+                },
+            },
+        });
+        
+        const jsonText = response.text.trim();
+        return JSON.parse(jsonText) as InvestorProfile[];
+    } catch (error) {
+        console.error("Error refining investor profiles:", error);
+        throw new Error("Failed to refine investor profiles.");
     }
 };
 
@@ -111,5 +157,62 @@ export const generateCampaignStrategy = async (projectDescription: string): Prom
     } catch (error) {
         console.error("Error generating campaign strategy:", error);
         throw new Error("Failed to generate campaign strategy. Please check the console for details.");
+    }
+};
+
+export const refineCampaignStrategy = async (projectDescription: string, originalStrategy: CampaignStrategy, feedback: string): Promise<CampaignStrategy> => {
+    try {
+        const prompt = `${BASE_PROMPT_PHILOSOPHY}\n\nYou previously generated a campaign strategy for a project. Here are the details:\n\n**Original Project Idea:** "${projectDescription}"\n\n**Your First Strategy:**\n---\n${JSON.stringify(originalStrategy, null, 2)}\n---\n\nThe user has provided the following feedback to improve the strategy:\n**User Feedback:** "${feedback}"\n\nPlease generate a new, refined campaign strategy that incorporates this feedback.`;
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        branding: {
+                            type: Type.OBJECT,
+                            properties: {
+                                name: { type: Type.STRING, description: "A powerful, fitting name for the project or brand." },
+                                tagline: { type: Type.STRING, description: "A memorable tagline that captures the essence of the mission." },
+                                coreMessage: { type: Type.STRING, description: "The central message that communicates the project's 'why'." },
+                            },
+                        },
+                        targetAudience: {
+                            type: Type.OBJECT,
+                            properties: {
+                                demographics: { type: Type.STRING, description: "Key demographic traits of the ideal supporter." },
+                                psychographics: { type: Type.STRING, description: "The values, beliefs, and lifestyle of the ideal supporter (the 'family')." },
+                            },
+                        },
+                        kickstarterStrategy: {
+                            type: Type.OBJECT,
+                            properties: {
+                                title: { type: Type.STRING, description: "A compelling title for the Kickstarter campaign." },
+                                fundingGoalRationale: { type: Type.STRING, description: "A transparent explanation of the funding goal and what it will achieve." },
+                                rewardTiers: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Creative reward tiers that offer value and build community." },
+                            },
+                        },
+                        targetedAdConcepts: {
+                            type: Type.ARRAY,
+                            items: {
+                                type: Type.OBJECT,
+                                properties: {
+                                    platform: { type: Type.STRING, description: "The social media platform for the ad (e.g., Instagram, Facebook)." },
+                                    headline: { type: Type.STRING, description: "An attention-grabbing headline for the ad." },
+                                    body: { type: Type.STRING, description: "The ad copy, written to inspire and connect." },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        const jsonText = response.text.trim();
+        return JSON.parse(jsonText) as CampaignStrategy;
+    } catch (error) {
+        console.error("Error refining campaign strategy:", error);
+        throw new Error("Failed to refine campaign strategy.");
     }
 };

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { generateGrantProposal } from '../../services/geminiService';
+import { generateGrantProposal, refineGrantProposal } from '../../services/geminiService';
 import type { GrantProposal } from '../../types';
 import ViewContainer from '../common/ViewContainer';
 import Card from '../common/Card';
@@ -10,6 +9,7 @@ import Loader from '../common/Loader';
 const GrantWriterView: React.FC = () => {
   const [projectDescription, setProjectDescription] = useState('');
   const [grantProposal, setGrantProposal] = useState<GrantProposal | null>(null);
+  const [feedback, setFeedback] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,6 +21,7 @@ const GrantWriterView: React.FC = () => {
     setIsLoading(true);
     setError(null);
     setGrantProposal(null);
+    setFeedback('');
     try {
       const result = await generateGrantProposal(projectDescription);
       setGrantProposal(result);
@@ -28,6 +29,24 @@ const GrantWriterView: React.FC = () => {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleRefine = async () => {
+    if (!feedback.trim() || !grantProposal) {
+      setError('Please enter feedback to refine the proposal.');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await refineGrantProposal(projectDescription, grantProposal, feedback);
+      setGrantProposal(result); // Replace with refined proposal
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred during refinement.');
+    } finally {
+      setIsLoading(false);
+      setFeedback(''); // Clear feedback after submission
     }
   };
 
@@ -60,17 +79,43 @@ const GrantWriterView: React.FC = () => {
       </Card>
 
       {(isLoading || grantProposal) && (
-        <Card>
-          <div className="p-6">
-            <h3 className="text-xl font-semibold text-slate-800 mb-4">Generated Proposal</h3>
-            {isLoading && <Loader />}
-            {grantProposal && (
-              <div className="prose prose-slate max-w-none">
-                <pre className="whitespace-pre-wrap font-sans bg-slate-50 p-4 rounded-md">{grantProposal}</pre>
-              </div>
+        <div className="space-y-8">
+            <Card>
+            <div className="p-6">
+                <h3 className="text-xl font-semibold text-slate-800 mb-4">Generated Proposal</h3>
+                {isLoading && <Loader />}
+                {grantProposal && !isLoading && (
+                <div className="prose prose-slate max-w-none">
+                    <pre className="whitespace-pre-wrap font-sans bg-slate-50 p-4 rounded-md">{grantProposal}</pre>
+                </div>
+                )}
+            </div>
+            </Card>
+            
+            {grantProposal && !isLoading && (
+                 <Card>
+                    <div className="p-6">
+                        <h3 className="text-lg font-semibold text-slate-700">Refine the Proposal</h3>
+                        <label htmlFor="feedback" className="mt-1 block text-sm text-slate-600">
+                        Is this proposal not quite right? Provide feedback and the AI will try again.
+                        </label>
+                        <textarea
+                            id="feedback"
+                            rows={4}
+                            className="mt-2 block w-full rounded-md border-slate-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
+                            placeholder="e.g., 'Make it more focused on the educational aspect for the youth.' or 'Add a section about our long-term financial sustainability.'"
+                            value={feedback}
+                            onChange={(e) => setFeedback(e.target.value)}
+                        />
+                        <div className="mt-4 text-right">
+                            <Button onClick={handleRefine} isLoading={isLoading} disabled={!feedback.trim()}>
+                                Refine Proposal
+                            </Button>
+                        </div>
+                    </div>
+                </Card>
             )}
-          </div>
-        </Card>
+        </div>
       )}
     </ViewContainer>
   );
