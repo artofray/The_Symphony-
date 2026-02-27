@@ -5,34 +5,165 @@
 # NEVER commit config.yaml — it contains API keys.
 # =============================================
 
-# Primary LLM provider
-llm:
-  provider: "venice"           # venice, openai, anthropic, google
-  model: "llama-3.3-70b"      # primary model
-  api_key: "YOUR_API_KEY_HERE"
-
-# Coding agent model
-coding:
-  provider: "venice"
-  model: "mamba-codestral-7b"
-  api_key: "YOUR_API_KEY_HERE"
-
-# Image generation
-images:
-  provider: "venice"
-  model: "nano-banana-pro"
-  api_key: "YOUR_API_KEY_HERE"
-
-# Gemini (for dashboard AI features)
-gemini:
-  api_key: "YOUR_GEMINI_API_KEY_HERE"
-
-# Communication channels (optional)
-telegram:
-  bot_token: ""
-  chat_id: ""
-
-# User preferences
-user:
-  name: "Your Name"
+# =============================================
+# GATEWAY CONFIGURATION
+# =============================================
+gateway:
+  host: "0.0.0.0"
+  port: 18789
+  daemon: true
   timezone: "America/New_York"
+  locale: "en-US"
+
+  # Docker sandbox for safe code execution
+  sandbox:
+    enabled: true
+    image: "openclaw/sandbox:latest"
+    memory_limit: "4g"
+    cpu_limit: 2
+
+# =============================================
+# LLM CONFIGURATION — MODEL TIERS
+# =============================================
+# The Symphony supports multiple model tiers.
+# The Conductor routes to the right tier based on the task.
+llm:
+  # Primary — strongest general-purpose reasoning
+  primary:
+    provider: "openai-compatible"
+    model: "llama-3.3-70b"
+    base_url: "https://api.venice.ai/api/v1"
+    api_key: "YOUR_VENICE_API_KEY"
+    temperature: 0.7
+    max_tokens: 8192
+
+  # Fallback — fast, strong at coding + agentic tool use
+  fallback:
+    provider: "openai-compatible"
+    model: "MiniMax-M2.5-Lightning"
+    base_url: "https://api.minimax.io/v1"
+    api_key: "YOUR_MINIMAX_API_KEY"
+    temperature: 0.7
+    max_tokens: 8192
+
+  # Uncensored — Dolphin Mistral 24B Venice Edition (free via OpenRouter)
+  # The Conductor switches to this for creative/unrestricted use cases
+  # 32K context, ~68 tok/s, $0 input/$0 output
+  uncensored:
+    provider: "openai-compatible"
+    model: "cognitivecomputations/dolphin-mistral-24b-venice-edition:free"
+    base_url: "https://openrouter.ai/api/v1"
+    api_key: "YOUR_OPENROUTER_API_KEY"
+    temperature: 0.8
+    max_tokens: 8192
+    context_window: 32768
+
+  # Emergency — Gemini Flash as last resort (free tier / cheap)
+  emergency:
+    provider: "google"
+    model: "gemini-2.0-flash"
+    api_key: "YOUR_GOOGLE_API_KEY"
+    temperature: 0.7
+    max_tokens: 8192
+
+  # Context window management
+  context:
+    max_tokens: 128000
+    summarize_at: 100000
+    warn_at: 118000
+
+# =============================================
+# THE SYMPHONY — AGENT ENDPOINTS
+# =============================================
+# NVIDIA NIM containers for GPU-intensive local inference
+# Configure these when hardware is available
+symphony:
+  master_coder:
+    name: "Master Coder"
+    instrument: "Cello"
+    model: "mamba-codestral-7b"
+    endpoint: "${NIM_CODER_ENDPOINT:-http://localhost:8001}"
+    enabled: false
+
+  historian:
+    name: "Historian"
+    instrument: "Violin"
+    model: "nemotron-parse"
+    endpoint: "${NIM_HISTORIAN_ENDPOINT:-http://localhost:8002}"
+    enabled: false
+
+  meteorologist:
+    name: "Meteorologist"
+    instrument: "Percussion"
+    model: "fourcastnet2"
+    endpoint: "${NIM_WEATHER_ENDPOINT:-http://localhost:8003}"
+    enabled: false
+
+  visualizer:
+    name: "Visualizer"
+    instrument: "Brass"
+    model: "nano-banana-pro"
+    endpoint: "${NIM_VISUAL_ENDPOINT:-http://localhost:8004}"
+    enabled: false
+
+# =============================================
+# COMMUNICATION CHANNELS
+# =============================================
+channels:
+  telegram:
+    enabled: false
+    bot_token: "YOUR_TELEGRAM_BOT_TOKEN"
+    allowed_chats:
+      - name: "The Forge"
+        id: "YOUR_CHAT_ID"
+        type: "private"
+
+  slack:
+    enabled: false
+    bot_token: "YOUR_SLACK_BOT_TOKEN"
+
+  whatsapp:
+    enabled: false
+
+# =============================================
+# MEMORY & PERSISTENCE
+# =============================================
+memory:
+  storage: "local"
+  path: "./knowledge"
+  backup:
+    enabled: true
+    interval: "daily"
+    path: "./backups"
+    keep: 30
+
+# =============================================
+# SECURITY
+# =============================================
+security:
+  confirm_destructive: true
+  shell_whitelist: []
+  network:
+    allow_outbound: true
+    blocked_domains: []
+  humility_protocol: true
+
+# =============================================
+# SKILLS
+# =============================================
+skills:
+  path: "./skills"
+  enabled:
+    - "conductor"
+    - "master-coder"
+    - "historian"
+    - "meteorologist"
+    - "visualizer"
+    - "somacore"
+    - "stagehand"
+    - "humility-protocol"
+    - "motion-graphics"
+    - "archivist"
+    - "terminal_execution"
+    - "file_system_manager"
+    - "cron_scheduler"
