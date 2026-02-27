@@ -1,0 +1,42 @@
+# WQOR Daily Broadcast Schedule
+
+schedules:
+  - name: "The Morning Frequency"
+    cron: "0 6 * * *" # 6:00 AM Dawn
+    agent: "Maggie"
+    vibe: "High-vibration, upbeat ambient, light lo-fi beats, clarity, optimism"
+    action: "switch_playlist_and_vibe"
+    transition: "crossfade_gentle"
+
+  - name: "The 3rd Timeline Lounge"
+    cron: "0 12 * * *" # 12:00 PM Noon
+    agent: "Maggie"
+    vibe: "Mid-tempo electronic, smooth grooves, focus-enhancing soundscapes"
+    action: "switch_playlist_and_vibe"
+    transition: "crossfade_gentle"
+
+  - name: "Oasis Nights"
+    cron: "0 18 * * *" # 6:00 PM Evening
+    agent: "Maggie"
+    vibe: "Deep, meditative soundscapes, solfeggio frequencies, ethereal ambient"
+    action: "switch_playlist_and_vibe"
+    transition: "crossfade_gentle"
+
+  - name: "Midnight Pirate Handoff"
+    cron: "0 0 * * *" # 12:00 AM Midnight
+    from_agent: "Maggie"
+    to_agent: "Jonny Potseed"
+    vibe: "Underground radical peace, safe harbor, unconditional love"
+    actions:
+      - action: "audio_mixer_control.duck_volume"
+        duration: "5s"
+        level: "20%"
+      - action: "play_audio"
+        file: "assets/audio/maggie_piano_fade.wav"
+      - action: "play_audio"
+        file: "assets/audio/jonny_potseed_midnight_intro.wav"
+        description: "You've found WQOR... I'm Jonny Potseed."
+      - action: "switch_playlist_and_vibe"
+        playlist: "late_night_mind_expanding"
+      - action: "audio_mixer_control.restore_volume"
+        duration: "5s"

@@ -22,3 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# =============================================
+# Symphony Security — Never commit these
+# =============================================
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# OpenClaw personal data (user-specific, not framework)
+openclaw/data/memory/
+openclaw/data/daily-notes/
+openclaw/knowledge/MEMORY.md
+openclaw/memory/
+*.heartbeat-state.json
+
+# API keys and tokens
+openclaw/config.yaml
+
+# Debug logs
+openclaw_debug*.log

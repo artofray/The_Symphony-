@@ -1,5 +1,18 @@
 {
   "name": "The Symphony",
-  "description": "A framework for a swarm of AI assistants that carries out the functions in the operating system, The Oasis as directed by the , Maggie.ai the conductor of the orchestra of agents. Based on principles of collaboration, service, and long-term vision, this tool helps mission-driven projects service to others.",
+  "description": "An open-source, positively-aligned agentic workflow framework. Maggie.ai conducts an orchestra of specialized AI agents that work collaboratively, with built-in security against prompt injection, secret exposure, and adversarial behavior. Built on the principle that coherence brings abundance.",
+  "version": "0.2.0",
+  "author": "artofray",
+  "license": "MIT",
+  "repository": "https://github.com/artofray/The_Symphony-",
+  "keywords": [
+    "ai-agents",
+    "multi-agent",
+    "orchestration",
+    "security",
+    "prompt-injection-defense",
+    "collaborative-ai",
+    "open-source"
+  ],
   "requestFramePermissions": []
 }

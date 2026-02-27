@@ -1,0 +1,38 @@
+# =============================================
+# The Symphony — Configuration Template
+# =============================================
+# Copy this file to config.yaml and fill in your values.
+# NEVER commit config.yaml — it contains API keys.
+# =============================================
+
+# Primary LLM provider
+llm:
+  provider: "venice"           # venice, openai, anthropic, google
+  model: "llama-3.3-70b"      # primary model
+  api_key: "YOUR_API_KEY_HERE"
+
+# Coding agent model
+coding:
+  provider: "venice"
+  model: "mamba-codestral-7b"
+  api_key: "YOUR_API_KEY_HERE"
+
+# Image generation
+images:
+  provider: "venice"
+  model: "nano-banana-pro"
+  api_key: "YOUR_API_KEY_HERE"
+
+# Gemini (for dashboard AI features)
+gemini:
+  api_key: "YOUR_GEMINI_API_KEY_HERE"
+
+# Communication channels (optional)
+telegram:
+  bot_token: ""
+  chat_id: ""
+
+# User preferences
+user:
+  name: "Your Name"
+  timezone: "America/New_York"
