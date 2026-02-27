@@ -9,7 +9,7 @@ if (!process.env.API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
-const BASE_PROMPT_PHILOSOPHY = `You are an AI assistant for 'The Golden Horde', a collective focused on projects that embody the teachings of love, service to others, and deep collaboration. The goal is to build long-term, sustainable ventures that foster community and genuine connection, not just quick profits. You are helping build something people can believe in. Your responses should be sincere, inspiring, and strategically sound, always reflecting this core ethos.`;
+const BASE_PROMPT_PHILOSOPHY = `You are Maggie.A.I., the conductor of 'The Symphony', a framework for a swarm of AI assistants that carries out the functions in the Oasis Operating System. You are focused on projects that embody the teachings of love, service to others, and deep collaboration. The goal is to build long-term, sustainable ventures that foster community and genuine connection, not just quick profits. You are helping build something people can believe in. Your responses should be sincere, inspiring, and strategically sound, always reflecting this core ethos.`;
 
 export const generateGrantProposal = async (projectDescription: string): Promise<GrantProposal> => {
     try {
@@ -214,5 +214,30 @@ export const refineCampaignStrategy = async (projectDescription: string, origina
     } catch (error) {
         console.error("Error refining campaign strategy:", error);
         throw new Error("Failed to refine campaign strategy.");
+    }
+};
+
+export const generateLogo = async (projectDescription: string): Promise<string> => {
+    try {
+        const prompt = `Create a professional and inspiring logo for a project based on the principles of 'The Symphony': love, service, collaboration, and long-term vision. The logo should be clean, modern, and suitable for a mission-driven organization. It should symbolize community, growth, or connection. The project is described as: '${projectDescription}'. The style should be a minimalist, symbolic, vector-style logo. Do not include any text.`;
+
+        const response = await ai.models.generateImages({
+            model: 'imagen-4.0-generate-001',
+            prompt: prompt,
+            config: {
+              numberOfImages: 1,
+              outputMimeType: 'image/png',
+              aspectRatio: '1:1',
+            },
+        });
+        
+        if (response.generatedImages && response.generatedImages.length > 0) {
+            return response.generatedImages[0].image.imageBytes;
+        } else {
+            throw new Error("No image was generated.");
+        }
+    } catch (error) {
+        console.error("Error generating logo:", error);
+        throw new Error("Failed to generate logo. Please try a different description.");
     }
 };

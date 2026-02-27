@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AppView } from './types';
 import Header from './components/Header';
@@ -6,6 +5,8 @@ import DashboardView from './components/views/DashboardView';
 import GrantWriterView from './components/views/GrantWriterView';
 import InvestorProfilerView from './components/views/InvestorProfilerView';
 import CampaignStrategistView from './components/views/CampaignStrategistView';
+import BrandingAssetView from './components/views/BrandingAssetView';
+import OrganicIntelligenceView from './components/views/OrganicIntelligenceView';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(AppView.DASHBOARD);
@@ -18,6 +19,10 @@ const App: React.FC = () => {
         return <InvestorProfilerView />;
       case AppView.CAMPAIGN_STRATEGIST:
         return <CampaignStrategistView />;
+      case AppView.BRANDING_ASSET_GENERATOR:
+        return <BrandingAssetView />;
+      case AppView.ORGANIC_INTELLIGENCE:
+        return <OrganicIntelligenceView />;
       case AppView.DASHBOARD:
       default:
         return <DashboardView navigate={setCurrentView} />;
