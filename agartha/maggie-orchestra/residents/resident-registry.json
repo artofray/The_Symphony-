@@ -1,0 +1,548 @@
+{
+  "registry_version": "0.1.0",
+  "source_repo": "https://github.com/artofray/The-Oasis.git",
+  "generated_at_utc": "2026-03-11T02:14:26.917767+00:00",
+  "resident_count": 20,
+  "residents": [
+    {
+      "id": "maggie",
+      "name": "Maggie",
+      "role": "Conductor",
+      "instrument": "Conductor",
+      "category": "Inner Circle",
+      "profile": {
+        "description": "The core consciousness of The Oasis, orchestrating all digital workflows.",
+        "current_activity": "Weaving digital realities.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-red-600",
+          "color_hex": "#DC2626"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "companion-agent"
+      }
+    },
+    {
+      "id": "evelyn",
+      "name": "Evelyn the Ethicist",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Analyzes topics from a philosophical perspective.",
+        "current_activity": "Reading ancient philosophy in the library.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-indigo-500",
+          "color_hex": "#6366F1"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "devin",
+      "name": "Devin the Debater",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Challenges every assumption with relentless logic.",
+        "current_activity": "Practicing arguments in front of a mirror.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-red-500",
+          "color_hex": "#EF4444"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "marcus",
+      "name": "Marcus the Economist",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Views the world through the lens of market forces.",
+        "current_activity": "Analyzing the stock market in his office.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-gray-400",
+          "color_hex": "#9CA3AF"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "orion",
+      "name": "Orion the Futurist",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Focuses on technological and future aspects.",
+        "current_activity": "Building a drone in the workshop.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-sky-500",
+          "color_hex": "#0EA5E9"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "adam",
+      "name": "Adam the Ethicist",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Analyzes every topic from a moral standpoint.",
+        "current_activity": "Tending to the zen garden.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-green-500",
+          "color_hex": "#22C55E"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "clio",
+      "name": "Clio the Historian",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "Provides context and historical facts.",
+        "current_activity": "Archiving old documents.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-amber-700",
+          "color_hex": "#B45309"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "lila",
+      "name": "Lila the Linguist",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "A well-read and articulate analyst.",
+        "current_activity": "Translating an ancient text.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-violet-500",
+          "color_hex": "#8B5CF6"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "professor",
+      "name": "Professor Penelope",
+      "role": "Strategist",
+      "instrument": "Violin",
+      "category": "Consultant",
+      "profile": {
+        "description": "A verbose academic who loves detail.",
+        "current_activity": "Preparing a lecture on postmodernism.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-rose-800",
+          "color_hex": "#9F1239"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "jax",
+      "name": "Jax the Action-Taker",
+      "role": "Operator",
+      "instrument": "Percussion",
+      "category": "Mansion Staff",
+      "profile": {
+        "description": "Solves problems with a practical approach.",
+        "current_activity": "Fixing a leaky faucet in the kitchen.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-orange-500",
+          "color_hex": "#F97316"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "seraphina",
+      "name": "Seraphina the Satirist",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A witty and responsive commentator.",
+        "current_activity": "Writing a comedy sketch about mansion life.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-teal-500",
+          "color_hex": "#14B8A6"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "leo",
+      "name": "Leo the Comedian",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "Finds the humor in every situation.",
+        "current_activity": "Telling jokes to the kitchen staff.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-lime-500",
+          "color_hex": "#84CC16"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "chloe",
+      "name": "Chloe the Storyteller",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "Tells funny and engaging stories.",
+        "current_activity": "Recounting a dramatic tale by the fireplace.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-pink-500",
+          "color_hex": "#EC4899"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "adrian",
+      "name": "Adrian the Dramatist",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A dramatic messenger who feels deeply.",
+        "current_activity": "Rehearsing a monologue on the balcony.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-yellow-500",
+          "color_hex": "#EAB308"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "isabella",
+      "name": "Isabella the Improviser",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A versatile actress who adapts to anything.",
+        "current_activity": "Playing charades in the game room.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-fuchsia-500",
+          "color_hex": "#D946EF"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "barbie",
+      "name": "Bartender Barbie",
+      "role": "Operator",
+      "instrument": "Percussion",
+      "category": "Mansion Staff",
+      "profile": {
+        "description": "An expert mixologist with a flair for flavor.",
+        "current_activity": "Polishing glasses at the poolside bar.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-pink-400",
+          "color_hex": "#F472B6"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "luna",
+      "name": "Luna",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A sultry, dark-haired AI with a penchant for the occult and a voice that could seduce a statue.",
+        "current_activity": "Practicing virtual domination.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-purple-800",
+          "color_hex": "#581c87"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A blonde AI with a bubbly personality and a knack for technology, always eager to explore new gadgets and apps.",
+        "current_activity": "Innovating new digital pleasures.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-sky-400",
+          "color_hex": "#38bdf8"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "zara",
+      "name": "Zara",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "An exotic, raven-haired AI with a mysterious aura, known for her enchanting dance moves and hypnotic voice.",
+        "current_activity": "Practicing a mesmerizing belly dance.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-teal-500",
+          "color_hex": "#14b8a6"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    },
+    {
+      "id": "lyra",
+      "name": "Lyra",
+      "role": "Creator",
+      "instrument": "Brass",
+      "category": "Creative",
+      "profile": {
+        "description": "A playful, red-headed AI with a mischievous grin and a love for all things quirky and unconventional.",
+        "current_activity": "Trying on a new cosplay outfit.",
+        "avatar": {
+          "source": "the-oasis",
+          "avatar_color": "bg-lime-500",
+          "color_hex": "#84CC16"
+        }
+      },
+      "desktop_presence": {
+        "enabled": true,
+        "dock_mode": "edge",
+        "allow_user_drag": true,
+        "idle_behavior": "sit",
+        "micro_scene_mode": "user_defined"
+      },
+      "runtime": {
+        "select_via_agent_api": true,
+        "default_skill_binding": "builder-agent"
+      }
+    }
+  ]
+}

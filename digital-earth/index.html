@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Earth Twin</title>
+  <link href="https://cdn.jsdelivr.net/npm/cesium@1.118/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="toolbar">
+    <div class="group">
+      <button id="orbitalBtn">Orbital View</button>
+      <button id="spinBtn" data-on="true">Spin: On</button>
+    </div>
+    <div class="group">
+      <label><input type="checkbox" id="cloudsToggle" checked /> Clouds</label>
+      <label><input type="checkbox" id="atmoToggle" checked /> Atmosphere</label>
+      <label><input type="checkbox" id="nightToggle" /> Night Lights</label>
+      <label><input type="checkbox" id="buildingsToggle" checked /> 3D Buildings</label>
+    </div>
+    <div class="group search">
+      <input id="cityInput" placeholder="Try: New York, Tokyo, Lagos, Sao Paulo" />
+      <button id="goBtn">Go</button>
+    </div>
+    <div id="status"></div>
+  </div>
+  <aside id="modulePanel">
+    <h3>Quantum Oasis Modules</h3>
+    <p class="panelIntro">Browse core systems without leaving the Earth twin.</p>
+    <div class="filters">
+      <button class="filterBtn active" data-filter="all">All</button>
+      <button class="filterBtn" data-filter="core">Core</button>
+      <button class="filterBtn" data-filter="operations">Operations</button>
+      <button class="filterBtn" data-filter="tools">Tools</button>
+    </div>
+    <div id="moduleGrid"></div>
+  </aside>
+  <aside id="weatherPanel">
+    <h3>Agartha Weather</h3>
+    <p class="panelIntro">Up-to-the-minute conditions and active warnings.</p>
+    <div class="weatherControls">
+      <input id="weatherLocationInput" placeholder="City (e.g., Mansfield, New York)" />
+      <button id="weatherRefreshBtn">Refresh</button>
+    </div>
+    <div id="weatherNow">Loading weather...</div>
+    <div id="weatherWarnings"></div>
+    <div class="moduleLinks weatherLinks">
+      <a id="weatherWiseLink" href="https://web.weatherwise.app/#map=8.34/39.611/-82.71&rt=TCMH&rp=TZ0" target="_blank" rel="noopener noreferrer">Open WeatherWise Live</a>
+      <a id="nwsAlertsLink" href="https://www.weather.gov/" target="_blank" rel="noopener noreferrer">Open NWS Alerts</a>
+    </div>
+    <div id="weatherUpdated"></div>
+  </aside>
+  <aside id="gatewayPanel" class="hidden">
+    <h3>Music Machine Gateway</h3>
+    <p class="panelIntro" id="gatewayChapterLabel">Chapter 1</p>
+    <h4 id="gatewayChapterTitle"></h4>
+    <p id="gatewayChapterText"></p>
+    <div class="gatewayControls">
+      <button id="gatewayPrevBtn">Prev</button>
+      <button id="gatewayPlayBtn">Play</button>
+      <button id="gatewayNextBtn">Next</button>
+      <button id="gatewayCloseBtn">Close</button>
+    </div>
+    <p class="gatewayVideoNote">
+      Optional render: <a href="./media/agartha-intro-v1.mp4" target="_blank" rel="noopener noreferrer">open intro video</a>
+    </p>
+  </aside>
+
+  <div id="cesiumContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/cesium@1.118/Build/Cesium/Cesium.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "scenario_name": "quantum_oasis_base",
+  "horizon_years": 10,
+  "start_year": 2026,
+  "regions": [
+    "Ohio Pilot",
+    "US Expansion",
+    "Global Coalition"
+  ],
+  "assumptions": {
+    "ubo_adoption_rate_initial": 0.02,
+    "ubo_adoption_rate_max": 0.55,
+    "energy_independence_initial": 0.03,
+    "energy_independence_max": 0.6,
+    "data_sovereignty_index_initial": 0.25,
+    "data_sovereignty_index_max": 0.82,
+    "tier1_resource_pooling_initial": 0.01,
+    "tier1_resource_pooling_max": 0.4,
+    "productivity_gain_ceiling": 0.22,
+    "resilience_gain_ceiling": 0.35
+  },
+  "risk_controls": {
+    "governance_quality": 0.55,
+    "regulatory_alignment": 0.5,
+    "execution_discipline": 0.58,
+    "public_trust": 0.46
+  }
+}

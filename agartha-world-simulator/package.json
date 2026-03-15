@@ -1,0 +1,13 @@
+{
+  "name": "agartha-world-simulator",
+  "version": "0.1.0",
+  "description": "Desktop live world simulator where OpenClaw bots build Agartha from code activity.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^36.0.0"
+  }
+}

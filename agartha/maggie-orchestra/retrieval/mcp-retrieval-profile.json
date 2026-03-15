@@ -1,0 +1,59 @@
+{
+  "profile": "jmri-core-compatible",
+  "version": "0.1.0",
+  "goal": "Normalize retrieval across jcodemunch and jdocmunch for lower orchestration friction.",
+  "endpoints": {
+    "jdocmunch": {
+      "tools": [
+        "index_local",
+        "index_repo",
+        "list_repos",
+        "search_sections",
+        "get_section",
+        "get_sections",
+        "get_toc",
+        "get_toc_tree",
+        "get_document_outline",
+        "delete_index"
+      ],
+      "role": "documentation retrieval"
+    },
+    "jcodemunch": {
+      "tools": [
+        "index_local",
+        "index_repo",
+        "list_repos",
+        "search_symbols",
+        "get_symbol",
+        "get_symbols",
+        "get_file_outline",
+        "delete_index"
+      ],
+      "role": "code retrieval"
+    }
+  },
+  "routing": {
+    "docs_query": [
+      "jdocmunch.search_sections",
+      "jdocmunch.get_section|get_sections"
+    ],
+    "code_query": [
+      "jcodemunch.search_symbols",
+      "jcodemunch.get_symbol|get_symbols"
+    ],
+    "mixed_query": [
+      "jcodemunch.search_symbols",
+      "jdocmunch.search_sections",
+      "targeted retrieval on both"
+    ]
+  },
+  "metrics": {
+    "primary": "delta_tokens_saved",
+    "secondary": [
+      "retrieval_latency_ms",
+      "answer_grounding_rate",
+      "hallucination_rate",
+      "cost_avoided_usd"
+    ]
+  }
+}

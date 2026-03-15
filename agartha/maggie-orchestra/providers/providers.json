@@ -1,0 +1,80 @@
+{
+  "defaultProvider": "local-llm",
+  "fallbackProvider": "venice",
+  "providers": [
+    {
+      "id": "gemini",
+      "label": "Google Gemini",
+      "type": "remote",
+      "baseUrl": "https://generativelanguage.googleapis.com",
+      "model": "gemini-2.5-pro",
+      "apiKeyEnv": "GEMINI_API_KEY",
+      "capabilities": {
+        "chat": true,
+        "vision": true,
+        "voice": false,
+        "image": false,
+        "video": false
+      }
+    },
+    {
+      "id": "mercury",
+      "label": "Mercury 2",
+      "type": "remote",
+      "baseUrl": "https://api.inceptionlabs.ai",
+      "model": "mercury-2",
+      "apiKeyEnv": "MERCURY_API_KEY",
+      "capabilities": {
+        "chat": true,
+        "vision": false,
+        "voice": false,
+        "image": false,
+        "video": false
+      }
+    },
+    {
+      "id": "local-llm",
+      "label": "Local Uncensored LLM",
+      "type": "local",
+      "baseUrl": "http://127.0.0.1:11434",
+      "model": "dolphin-large-uncensored",
+      "capabilities": {
+        "chat": true,
+        "vision": false,
+        "voice": true,
+        "image": false,
+        "video": false
+      }
+    },
+    {
+      "id": "venice",
+      "label": "Venice API",
+      "type": "remote",
+      "baseUrl": "https://api.venice.ai",
+      "model": "venice-uncensored",
+      "apiKeyEnv": "VENICE_API_KEY",
+      "capabilities": {
+        "chat": true,
+        "vision": true,
+        "voice": true,
+        "image": true,
+        "video": false
+      }
+    },
+    {
+      "id": "janitor",
+      "label": "Janitor API",
+      "type": "remote",
+      "baseUrl": "https://api.janitorai.com",
+      "model": "janitor-chat",
+      "apiKeyEnv": "JANITOR_API_KEY",
+      "capabilities": {
+        "chat": true,
+        "vision": false,
+        "voice": false,
+        "image": false,
+        "video": false
+      }
+    }
+  ]
+}

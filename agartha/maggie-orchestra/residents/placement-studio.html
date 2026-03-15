@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resident Placement Studio</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: Segoe UI, Arial, sans-serif; background: #0b1220; color: #e6edf3; }
+    .app { display: grid; grid-template-columns: 320px 1fr; height: 100vh; }
+    .left { border-right: 1px solid #22304a; padding: 12px; overflow: auto; }
+    .left h2 { margin: 0 0 10px; font-size: 16px; }
+    .left .row { margin-bottom: 8px; }
+    .left input, .left select, .left button {
+      width: 100%; background: #131d31; color: #d4e1f7; border: 1px solid #2a3a58; border-radius: 8px; padding: 8px;
+    }
+    .left button { cursor: pointer; }
+    .section { margin-top: 14px; padding-top: 10px; border-top: 1px solid #22304a; }
+    .section h3 { margin: 0 0 8px; font-size: 13px; color: #9ec0ff; }
+    .left textarea {
+      width: 100%; min-height: 78px; resize: vertical; background: #131d31; color: #d4e1f7;
+      border: 1px solid #2a3a58; border-radius: 8px; padding: 8px; box-sizing: border-box;
+    }
+    .row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .status {
+      border: 1px solid #2a3a58; border-radius: 8px; padding: 8px; font-size: 12px; color: #a9c1e8; background: #111a2a;
+      white-space: pre-wrap; overflow-wrap: anywhere;
+    }
+    .list { margin-top: 12px; display: grid; gap: 6px; }
+    .resident { border: 1px solid #2a3a58; border-radius: 8px; padding: 8px; cursor: pointer; background: #10192a; }
+    .resident.active { border-color: #63a8ff; background: #15233d; }
+    .name { font-weight: 600; font-size: 13px; }
+    .role { opacity: .8; font-size: 12px; }
+    .stageWrap { position: relative; }
+    .stage {
+      position: absolute; inset: 0; background:
+      radial-gradient(1200px 500px at 30% -50%, #224 0%, transparent 70%),
+      radial-gradient(1000px 400px at 80% 120%, #123 0%, transparent 70%),
+      linear-gradient(180deg, #09111f, #0d1728 45%, #0f1d33);
+      overflow: hidden;
+    }
+    .zone { position: absolute; border: 1px dashed #38517b; color: #7fa7e3; font-size: 11px; padding: 4px 6px; border-radius: 6px; opacity: .8; }
+    .zone.left { left: 8px; top: 8px; bottom: 8px; width: 110px; }
+    .zone.right { right: 8px; top: 8px; bottom: 8px; width: 110px; }
+    .zone.bottom { left: 130px; right: 130px; bottom: 8px; height: 82px; }
+    .zone.ambient { left: 160px; right: 160px; top: 16px; bottom: 104px; }
+    .card {
+      position: absolute; min-width: 170px; max-width: 240px; padding: 8px 10px; border-radius: 10px;
+      background: #15233c; border: 1px solid #3a5484; cursor: grab; user-select: none; box-shadow: 0 4px 14px rgba(0,0,0,.35);
+    }
+    .state-sit { animation: sitBreathe 4s ease-in-out infinite; }
+    .state-standby { animation: standbyPulse 2.2s ease-in-out infinite; }
+    .state-build-porch { animation: porchBuild 1.6s steps(2, end) infinite; }
+    .state-ambient-walk { animation: ambientWalk 3.6s ease-in-out infinite; }
+    @keyframes sitBreathe { 0%{transform:translateY(0)} 50%{transform:translateY(-2px)} 100%{transform:translateY(0)} }
+    @keyframes standbyPulse { 0%{box-shadow:0 0 0 rgba(99,168,255,.2)} 50%{box-shadow:0 0 20px rgba(99,168,255,.28)} 100%{box-shadow:0 0 0 rgba(99,168,255,.2)} }
+    @keyframes porchBuild { 0%{transform:rotate(0)} 50%{transform:rotate(-1.2deg)} 100%{transform:rotate(0)} }
+    @keyframes ambientWalk { 0%{transform:translateX(0)} 50%{transform:translateX(6px)} 100%{transform:translateX(0)} }
+    .card .n { font-size: 12px; font-weight: 700; }
+    .card .m { font-size: 11px; opacity: .82; margin-top: 2px; }
+    .hint { position: absolute; left: 12px; top: 12px; font-size: 12px; color: #91afd8; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="left">
+      <h2>Resident Placement Studio</h2>
+      <div class="row"><input id="apiBase" value="http://localhost:18890" /></div>
+      <div class="row"><button id="loadBtn">Load Cast + Placements</button></div>
+      <div class="row"><select id="profileSelect"></select></div>
+      <div class="row"><button id="saveSelectedBtn">Save Selected Placement</button></div>
+      <div class="row"><button id="saveAllBtn">Save All Cards</button></div>
+      <div class="section">
+        <h3>Workspace Merge</h3>
+        <div class="row"><input id="targetDoc" value="oasis-master-context" placeholder="targetDoc" /></div>
+        <div class="row"><input id="notebookId" value="maggie-ops" placeholder="notebookId" /></div>
+        <div class="row"><textarea id="fileSources" placeholder="One file path per line (C:\...)\nC:\Users\admin\.openclaw\workspace\agartha\maggie-orchestra\README.md"></textarea></div>
+        <div class="row"><textarea id="repoSources" placeholder="One local repo path per line (optional)\nC:\Users\admin\.openclaw\workspace\digital-earth"></textarea></div>
+        <div class="row"><input id="policyMode" value="append_with_dedupe" placeholder="mergePolicy.mode" /></div>
+        <div class="row"><input id="policyPriority" value="target,newer_source" placeholder="mergePolicy.priority (comma-separated)" /></div>
+        <div class="row"><input id="policyConflict" value="preserve_both_with_tags" placeholder="mergePolicy.conflict" /></div>
+        <div class="row two">
+          <input id="chunkSize" type="number" min="1" value="1200" placeholder="chunkSize" />
+          <input id="overlap" type="number" min="0" value="120" placeholder="overlap" />
+        </div>
+        <div class="row"><label><input id="dryRun" type="checkbox" /> dryRun (validate only)</label></div>
+        <div class="row two">
+          <button id="runMergeBtn">Run Merge</button>
+          <button id="pollMergeBtn">Refresh Latest</button>
+        </div>
+        <div class="status" id="mergeStatus">No merge job yet.</div>
+      </div>
+      <div class="list" id="residentList"></div>
+    </div>
+    <div class="stageWrap">
+      <div class="stage" id="stage">
+        <div class="hint">Drag cards. Drop near zone edges to auto-classify profile.</div>
+        <div class="zone left">edge-left</div>
+        <div class="zone right">edge-right</div>
+        <div class="zone bottom">browser-porch</div>
+        <div class="zone ambient">ambient-builder</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const el = (id) => document.getElementById(id);
+    const state = { cast: [], profiles: [], placements: {}, selectedId: null, cards: new Map(), mergePollTimer: null, mergePollTicks: 0, mergeActiveJobId: null };
+
+    function norm(v, min, max) { return (v - min) / (max - min || 1); }
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function detectProfile(nx, ny) {
+      if (ny > 0.84) return "browser-porch";
+      if (nx < 0.12) return "edge-left";
+      if (nx > 0.88) return "edge-right";
+      return "ambient-builder";
+    }
+
+    function profileToState(profileId) {
+      if (profileId === "edge-left") return "sit";
+      if (profileId === "edge-right") return "standby";
+      if (profileId === "browser-porch") return "build-porch";
+      return "ambient-walk";
+    }
+
+    function applyStateClass(card, stateName) {
+      card.classList.remove("state-sit", "state-standby", "state-build-porch", "state-ambient-walk");
+      card.classList.add("state-" + stateName);
+    }
+
+    async function jget(path) {
+      const base = el("apiBase").value.trim();
+      const r = await fetch(base + path);
+      return await r.json();
+    }
+
+    async function jpost(path, body) {
+      const base = el("apiBase").value.trim();
+      const r = await fetch(base + path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      return await r.json();
+    }
+
+    function lines(text) {
+      return (text || "")
+        .split(/\r?\n/g)
+        .map(v => v.trim())
+        .filter(Boolean);
+    }
+
+    function mergePayloadFromForm() {
+      const fileSources = lines(el("fileSources").value).map(path => ({ type: "file", path }));
+      const repoSources = lines(el("repoSources").value).map(localPath => ({ type: "repo", localPath }));
+      const sourceDocs = [...fileSources, ...repoSources];
+      const priority = lines(el("policyPriority").value.replace(/,/g, "\n"));
+      return {
+        sourceDocs,
+        targetDoc: el("targetDoc").value.trim(),
+        notebookId: el("notebookId").value.trim(),
+        mergePolicy: {
+          mode: el("policyMode").value.trim(),
+          priority,
+          conflict: el("policyConflict").value.trim()
+        },
+        chunkSize: parseInt(el("chunkSize").value || "1200", 10),
+        overlap: parseInt(el("overlap").value || "120", 10),
+        dryRun: !!el("dryRun").checked
+      };
+    }
+
+    function setMergeStatus(obj) {
+      el("mergeStatus").textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+    }
+
+    function stopMergePolling() {
+      if (state.mergePollTimer) window.clearInterval(state.mergePollTimer);
+      state.mergePollTimer = null;
+      state.mergePollTicks = 0;
+    }
+
+    function startMergePolling() {
+      stopMergePolling();
+      state.mergePollTimer = window.setInterval(async () => {
+        try {
+          const latest = await jget("/workspace/merge/latest");
+          setMergeStatus(latest);
+          state.mergePollTicks += 1;
+          if (state.mergePollTicks >= 60) stopMergePolling();
+        } catch (err) {
+          setMergeStatus("Latest merge poll failed: " + err.message);
+          stopMergePolling();
+        }
+      }, 2000);
+    }
+
+    function renderList() {
+      const list = el("residentList");
+      list.innerHTML = "";
+      state.cast.forEach(r => {
+        const node = document.createElement("div");
+        node.className = "resident" + (r.id === state.selectedId ? " active" : "");
+        node.innerHTML = `<div class="name">${r.name}</div><div class="role">${r.specialization.role}</div>`;
+        node.onclick = () => { state.selectedId = r.id; renderList(); };
+        list.appendChild(node);
+      });
+    }
+
+    function makeCard(resident, nx, ny, profileId) {
+      const stage = el("stage");
+      const rect = stage.getBoundingClientRect();
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.id = resident.id;
+      card.dataset.profileId = profileId || detectProfile(nx, ny);
+      applyStateClass(card, profileToState(card.dataset.profileId));
+      card.innerHTML = `<div class="n">${resident.name}</div><div class="m">${resident.specialization.role}</div>`;
+      card.style.left = `${nx * rect.width}px`;
+      card.style.top = `${ny * rect.height}px`;
+      let drag = null;
+      card.addEventListener("mousedown", (e) => {
+        drag = { ox: e.offsetX, oy: e.offsetY };
+        state.selectedId = resident.id;
+        renderList();
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!drag) return;
+        const r = stage.getBoundingClientRect();
+        const x = clamp(e.clientX - r.left - drag.ox, 4, r.width - card.offsetWidth - 4);
+        const y = clamp(e.clientY - r.top - drag.oy, 4, r.height - card.offsetHeight - 4);
+        card.style.left = `${x}px`;
+        card.style.top = `${y}px`;
+      });
+      window.addEventListener("mouseup", () => {
+        if (!drag) return;
+        drag = null;
+        const pos = getCardNorm(card.dataset.id);
+        card.dataset.profileId = detectProfile(pos.x, pos.y);
+        applyStateClass(card, profileToState(card.dataset.profileId));
+      });
+      stage.appendChild(card);
+      state.cards.set(resident.id, card);
+    }
+
+    function renderCards() {
+      const stage = el("stage");
+      [...stage.querySelectorAll(".card")].forEach(n => n.remove());
+      state.cards.clear();
+      state.cast.forEach((resident, i) => {
+        const p = state.placements[resident.id];
+        const x = p ? p.x : 0.2 + (i % 4) * 0.18;
+        const y = p ? p.y : 0.15 + Math.floor(i / 4) * 0.12;
+        const profileId = p ? p.profile_id : detectProfile(x, y);
+        makeCard(resident, x, y, profileId);
+      });
+    }
+
+    async function loadAll() {
+      const [castRes, profilesRes, placementsRes] = await Promise.all([
+        jget("/agency/cast"),
+        jget("/residents/placement-profiles"),
+        jget("/residents/placements")
+      ]);
+      state.cast = (castRes.cast && castRes.cast.residents) ? castRes.cast.residents : [];
+      state.profiles = (profilesRes.profiles && profilesRes.profiles.profiles) ? profilesRes.profiles.profiles : [];
+      state.placements = (placementsRes.placements && placementsRes.placements.placements) ? placementsRes.placements.placements : {};
+      if (!state.selectedId && state.cast.length) state.selectedId = state.cast[0].id;
+      const sel = el("profileSelect");
+      sel.innerHTML = "";
+      state.profiles.forEach(p => {
+        const o = document.createElement("option");
+        o.value = p.id;
+        o.textContent = `${p.id} - ${p.description}`;
+        sel.appendChild(o);
+      });
+      renderList();
+      renderCards();
+    }
+
+    function getCardNorm(id) {
+      const stage = el("stage").getBoundingClientRect();
+      const card = state.cards.get(id);
+      const x = norm(parseFloat(card.style.left || "0"), 0, stage.width);
+      const y = norm(parseFloat(card.style.top || "0"), 0, stage.height);
+      return { x: clamp(x, 0, 1), y: clamp(y, 0, 1) };
+    }
+
+    async function saveOne(id, forcedProfileId) {
+      const pos = getCardNorm(id);
+      const card = state.cards.get(id);
+      const profileId = forcedProfileId || card.dataset.profileId || detectProfile(pos.x, pos.y);
+      return await jpost("/residents/placements/set", { residentId: id, profileId, x: pos.x, y: pos.y });
+    }
+
+    el("loadBtn").onclick = loadAll;
+    el("saveSelectedBtn").onclick = async () => {
+      if (!state.selectedId) return;
+      const profileId = el("profileSelect").value;
+      await saveOne(state.selectedId, profileId);
+      alert("Saved selected resident placement.");
+    };
+    el("saveAllBtn").onclick = async () => {
+      for (const r of state.cast) await saveOne(r.id);
+      alert("Saved all resident placements.");
+    };
+    el("runMergeBtn").onclick = async () => {
+      try {
+        const payload = mergePayloadFromForm();
+        if (!payload.targetDoc || !payload.notebookId || payload.sourceDocs.length === 0) {
+          alert("targetDoc, notebookId, and at least one source path are required.");
+          return;
+        }
+        setMergeStatus("Submitting merge request...");
+        const result = await jpost("/workspace/merge", payload);
+        state.mergeActiveJobId = result && result.jobId ? result.jobId : null;
+        setMergeStatus(result);
+        startMergePolling();
+      } catch (err) {
+        setMergeStatus("Merge failed: " + err.message);
+      }
+    };
+    el("pollMergeBtn").onclick = async () => {
+      try {
+        const latest = await jget("/workspace/merge/latest");
+        setMergeStatus(latest);
+      } catch (err) {
+        setMergeStatus("Refresh failed: " + err.message);
+      }
+    };
+
+    loadAll().catch(err => alert("Load failed: " + err.message));
+  </script>
+</body>
+</html>

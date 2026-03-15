@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agartha World Simulator</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="hud">
+    <div class="titleBlock">
+      <h1>Agartha Live Build</h1>
+      <p id="targetPath">Watching: ...</p>
+    </div>
+    <div class="controls">
+      <label>
+        Camera
+        <select id="cameraSelect">
+          <option value="isometric">Isometric</option>
+          <option value="top">Top</option>
+          <option value="ground">Ground</option>
+        </select>
+      </label>
+      <label>
+        Sleep Mode
+        <input type="checkbox" id="sleepMode" checked />
+      </label>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div>Files: <span id="filesStat">0</span></div>
+    <div>Lines: <span id="linesStat">0</span></div>
+    <div>World Blocks: <span id="blocksStat">0</span></div>
+    <div>Bot Mood: <span id="moodStat">Happy</span></div>
+  </section>
+
+  <main>
+    <canvas id="world"></canvas>
+  </main>
+
+  <aside class="soundPanel">
+    <h2>ASMR Soundscape</h2>
+    <label><input type="checkbox" id="rainToggle" checked /> Rain</label>
+    <label><input type="checkbox" id="humToggle" checked /> Low Hum</label>
+    <label><input type="checkbox" id="chimeToggle" /> Soft Chimes</label>
+    <label>
+      Volume
+      <input type="range" id="volume" min="0" max="100" value="28" />
+    </label>
+  </aside>
+
+  <aside class="avatarPanel">
+    <h2>Clawbot Appearance</h2>
+    <div class="avatarRow">
+      <label>Agent</label>
+      <select id="botSelect"></select>
+    </div>
+    <div class="avatarRow">
+      <label>Body</label>
+      <input type="color" id="bodyColor" value="#f28c49" />
+    </div>
+    <div class="avatarRow">
+      <label>Hat</label>
+      <input type="color" id="hatColor" value="#ffd34d" />
+    </div>
+    <div class="avatarRow">
+      <label>Eye</label>
+      <input type="color" id="eyeColor" value="#1f1209" />
+    </div>
+    <div class="avatarRow">
+      <label>Size</label>
+      <input type="range" id="botSize" min="60" max="180" value="100" />
+    </div>
+    <div class="avatarRow">
+      <label>Anim</label>
+      <select id="animStyle">
+        <option value="bounce">Bounce</option>
+        <option value="sway">Sway</option>
+        <option value="blink">Blink</option>
+      </select>
+    </div>
+    <div class="avatarActions">
+      <button id="applyAvatarBtn">Apply</button>
+      <button id="copyAvatarJsonBtn">Copy JSON</button>
+    </div>
+    <textarea id="avatarJson" placeholder='Paste Mirage-style JSON {"bodyColor":"#f28c49","hatColor":"#ffd34d","eyeColor":"#1f1209","sizeScale":1,"anim":"bounce"}'></textarea>
+    <div class="avatarActions">
+      <button id="applyJsonBtn">Apply JSON</button>
+      <a href="file:///C:/Users/admin/.openclaw/workspace/MY.ai-entertainment-hub/apps/mirage-avatar-studio/README.md" target="_blank" rel="noopener noreferrer">Mirage Studio</a>
+    </div>
+  </aside>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

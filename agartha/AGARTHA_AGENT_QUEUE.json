@@ -1,0 +1,42 @@
+[
+  {
+    "id": "agartha-intro-cinematic",
+    "priority": "P0",
+    "owner_agent": "visualizer",
+    "supporting_agents": ["master-coder", "somacore"],
+    "status": "pending",
+    "brief": "Assemble 24s intro from provided clips and align to the Agartha arrival narrative."
+  },
+  {
+    "id": "music-machine-gateway",
+    "priority": "P0",
+    "owner_agent": "master-coder",
+    "supporting_agents": ["visualizer", "somacore"],
+    "status": "pending",
+    "brief": "Build chaptered onboarding scene from warehouse search to Agartha arrival."
+  },
+  {
+    "id": "coherence-world-state",
+    "priority": "P1",
+    "owner_agent": "conductor",
+    "supporting_agents": ["meteorologist", "historian"],
+    "status": "pending",
+    "brief": "Define harmony constraints so environment stays balanced and responsive."
+  },
+  {
+    "id": "creator-districts",
+    "priority": "P1",
+    "owner_agent": "visualizer",
+    "supporting_agents": ["master-coder"],
+    "status": "pending",
+    "brief": "Design district map for musicians, painters, singers, and dancers."
+  },
+  {
+    "id": "agent-orchestration-runtime",
+    "priority": "P0",
+    "owner_agent": "conductor",
+    "supporting_agents": ["dispatch-governor", "humility-protocol"],
+    "status": "pending",
+    "brief": "Operationalize dispatch/status lifecycle for all Agartha modules."
+  }
+]

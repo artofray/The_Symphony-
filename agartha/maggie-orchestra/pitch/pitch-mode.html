@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Symphony Pitch Mode</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: Segoe UI, Arial, sans-serif; background: #09101d; color: #e8efff; }
+    .wrap { display: grid; grid-template-columns: 330px 1fr; min-height: 100vh; }
+    .panel { border-right: 1px solid #223252; padding: 14px; }
+    .panel h2 { margin: 0 0 10px; font-size: 18px; }
+    .row { margin-bottom: 8px; }
+    input, button, select { width: 100%; padding: 9px; border-radius: 8px; border: 1px solid #2b3c60; background: #121d32; color: #dce9ff; }
+    button { cursor: pointer; }
+    .deck { padding: 18px; position: relative; }
+    .hero {
+      border: 1px solid #32476f; border-radius: 16px; min-height: calc(100vh - 36px);
+      background:
+        radial-gradient(1000px 400px at -10% -20%, rgba(110,72,255,0.25), transparent 70%),
+        radial-gradient(1200px 500px at 110% 120%, rgba(0,200,255,0.2), transparent 70%),
+        linear-gradient(180deg, #0d1830, #111f3a 45%, #132440);
+      padding: 28px;
+    }
+    .kicker { font-size: 13px; color: #9fb6df; letter-spacing: .6px; text-transform: uppercase; }
+    .title { margin-top: 10px; font-size: 40px; font-weight: 700; line-height: 1.15; }
+    .speaker { margin-top: 18px; font-size: 18px; color: #8fe3ff; }
+    .message { margin-top: 14px; font-size: 23px; line-height: 1.45; max-width: 960px; }
+    .meta { margin-top: 24px; color: #93abd3; font-size: 13px; }
+    .progress { margin-top: 14px; height: 8px; background: #1b2945; border-radius: 999px; overflow: hidden; }
+    .bar { height: 100%; width: 0%; background: linear-gradient(90deg, #56cbff, #7f88ff); transition: width 0.6s linear; }
+    .list { margin-top: 10px; display: grid; gap: 6px; max-height: 48vh; overflow: auto; }
+    .slideItem { border: 1px solid #2b3c60; border-radius: 8px; padding: 8px; cursor: pointer; font-size: 12px; background: #121b2d; }
+    .slideItem.active { border-color: #77adff; background: #172643; }
+    .cohostRow { margin-top: 6px; }
+    .cohostRow select { font-size: 12px; padding: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <aside class="panel">
+      <h2>Pitch Mode</h2>
+      <div class="row"><input id="apiBase" value="http://localhost:18890" /></div>
+      <div class="row"><input id="scriptPath" value="./pitch-script.json" /></div>
+      <div class="row"><button id="loadBtn">Load Script</button></div>
+      <div class="row"><button id="loadCastBtn">Load Agency Cast</button></div>
+      <div class="row"><button id="playBtn">Play</button></div>
+      <div class="row"><button id="pauseBtn">Pause</button></div>
+      <div class="row"><button id="nextBtn">Next</button></div>
+      <div class="row"><button id="prevBtn">Prev</button></div>
+      <div class="row"><button id="voiceBtn">Voice: Off</button></div>
+      <div class="row"><label style="font-size:12px;color:#9fb6df;">Duration (sec)</label><input id="durationSec" type="number" value="35" min="8" max="120"/></div>
+      <div class="list" id="slideList"></div>
+    </aside>
+    <main class="deck">
+      <section class="hero">
+        <div class="kicker" id="deckTitle">Symphony Pitch</div>
+        <div class="title" id="slideTitle">Load script to begin</div>
+        <div class="speaker" id="slideSpeaker">Speaker: --</div>
+        <div class="message" id="slideMessage">Use this mode for Maggie-led co-hosted pitch meetings.</div>
+        <div class="meta" id="slideMeta">Slide 0 / 0</div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const el = (id) => document.getElementById(id);
+    const state = { script: null, i: 0, timer: null, started: 0, voice: false, voicesLoaded: false, cast: [], cohostBySlideId: {} };
+
+    function renderList() {
+      const list = el("slideList");
+      list.innerHTML = "";
+      if (!state.script) return;
+      state.script.slides.forEach((s, idx) => {
+        const n = document.createElement("div");
+        n.className = "slideItem" + (idx === state.i ? " active" : "");
+        const selectedId = state.cohostBySlideId[s.id] || "";
+        const options = [`<option value="">No co-host</option>`].concat(
+          state.cast.map(a => `<option value="${a.id}" ${selectedId === a.id ? "selected" : ""}>${a.name}</option>`)
+        ).join("");
+        n.innerHTML = `<strong>${idx + 1}. ${s.title}</strong><br/><span>${s.speaker}</span><div class="cohostRow"><select data-slideid="${s.id}">${options}</select></div>`;
+        n.onclick = () => { state.i = idx; renderSlide(); };
+        list.appendChild(n);
+      });
+      [...list.querySelectorAll("select[data-slideid]")].forEach(sel => {
+        sel.addEventListener("change", () => {
+          state.cohostBySlideId[sel.dataset.slideid] = sel.value || "";
+          if (state.script && state.script.slides[state.i] && state.script.slides[state.i].id === sel.dataset.slideid) {
+            renderSlide();
+          }
+        });
+      });
+    }
+
+    function getCohost(slideId) {
+      const id = state.cohostBySlideId[slideId];
+      if (!id) return null;
+      return state.cast.find(c => c.id === id) || null;
+    }
+
+    function speak(text) {
+      if (!state.voice || !("speechSynthesis" in window)) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.02;
+      u.pitch = 1.0;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+
+    function renderSlide() {
+      if (!state.script) return;
+      const s = state.script.slides[state.i];
+      const cohost = getCohost(s.id);
+      const speakerLine = cohost ? `${s.speaker} + ${cohost.name}` : s.speaker;
+      const msg = s.message.includes("{{cohost}}")
+        ? s.message.replaceAll("{{cohost}}", cohost ? cohost.name : "your co-host")
+        : s.message;
+      el("deckTitle").textContent = `${state.script.title} - ${state.script.subtitle || ""}`;
+      el("slideTitle").textContent = s.title;
+      el("slideSpeaker").textContent = `Speaker: ${speakerLine}`;
+      el("slideMessage").textContent = msg;
+      el("slideMeta").textContent = `Slide ${state.i + 1} / ${state.script.slides.length}`;
+      el("bar").style.width = "0%";
+      renderList();
+      speak(`${speakerLine}. ${msg}`);
+    }
+
+    function stopTimer() {
+      if (state.timer) clearInterval(state.timer);
+      state.timer = null;
+    }
+
+    function startTimer() {
+      stopTimer();
+      if (!state.script) return;
+      const sec = Number(el("durationSec").value || state.script.default_duration_sec || 35);
+      state.started = Date.now();
+      state.timer = setInterval(() => {
+        const p = Math.min(1, (Date.now() - state.started) / (sec * 1000));
+        el("bar").style.width = `${(p * 100).toFixed(1)}%`;
+        if (p >= 1) {
+          if (state.i < state.script.slides.length - 1) {
+            state.i += 1;
+            renderSlide();
+            state.started = Date.now();
+          } else {
+            stopTimer();
+          }
+        }
+      }, 120);
+    }
+
+    async function loadScript() {
+      const path = el("scriptPath").value.trim();
+      const r = await fetch(path);
+      state.script = await r.json();
+      state.i = 0;
+      if (state.script.default_duration_sec) el("durationSec").value = state.script.default_duration_sec;
+      renderSlide();
+    }
+
+    async function loadCast() {
+      const base = el("apiBase").value.trim();
+      const r = await fetch(base + "/agency/cast");
+      const d = await r.json();
+      state.cast = (d.cast && d.cast.residents) ? d.cast.residents : [];
+      renderList();
+    }
+
+    el("loadBtn").onclick = () => loadScript().catch(e => alert("Load failed: " + e.message));
+    el("loadCastBtn").onclick = () => loadCast().catch(e => alert("Cast load failed: " + e.message));
+    el("playBtn").onclick = () => startTimer();
+    el("pauseBtn").onclick = () => stopTimer();
+    el("nextBtn").onclick = () => { if (!state.script) return; state.i = Math.min(state.i + 1, state.script.slides.length - 1); renderSlide(); };
+    el("prevBtn").onclick = () => { if (!state.script) return; state.i = Math.max(state.i - 1, 0); renderSlide(); };
+    el("voiceBtn").onclick = () => {
+      state.voice = !state.voice;
+      el("voiceBtn").textContent = `Voice: ${state.voice ? "On" : "Off"}`;
+      if (!state.voice && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    };
+
+    Promise.all([loadScript(), loadCast()]).catch(() => {});
+  </script>
+</body>
+</html>

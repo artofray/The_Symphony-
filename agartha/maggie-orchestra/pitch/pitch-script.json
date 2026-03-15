@@ -1,0 +1,50 @@
+{
+  "version": "0.1.0",
+  "title": "Symphony OS Pilot Pitch",
+  "subtitle": "Maggie-led co-hosted demo",
+  "default_duration_sec": 35,
+  "slides": [
+    {
+      "id": "s1",
+      "speaker": "Maggie",
+      "speaker_id_hint": "maggie",
+      "title": "Why Symphony, Why Now",
+      "message": "Teams are fragmented across tools and AI calls. Symphony turns scattered AI interactions into one coordinated operating layer."
+    },
+    {
+      "id": "s2",
+      "speaker": "Ray",
+      "speaker_id_hint": "ray",
+      "title": "Human First Direction",
+      "message": "This is built from the individual outward. We remove dependency traps and keep people in control of their own voice and data."
+    },
+    {
+      "id": "s3",
+      "speaker": "Maggie",
+      "speaker_id_hint": "maggie",
+      "title": "Accessibility Impact",
+      "message": "EyeSpeak workflows help nonverbal users communicate with confidence, while caregivers and educators can observe the same context in real time."
+    },
+    {
+      "id": "s4",
+      "speaker": "Sally Deal Strategist",
+      "speaker_id_hint": "sales-deal-strategist",
+      "title": "Pilot Structure",
+      "message": "We propose a 30-day pilot with measurable outcomes: communication velocity, retrieval efficiency, and decision cycle time. {{cohost}} will own weekly KPI review and stakeholder updates."
+    },
+    {
+      "id": "s5",
+      "speaker": "Mary Social Media Strategist",
+      "speaker_id_hint": "marketing-social-media-strategist",
+      "title": "Public Narrative",
+      "message": "The story is practical hope: communication access, local workforce pathways, and reliable AI infrastructure people can trust. {{cohost}} drives channel activation for this narrative."
+    },
+    {
+      "id": "s6",
+      "speaker": "Maggie",
+      "speaker_id_hint": "maggie",
+      "title": "The Ask",
+      "message": "Approve a 20-minute live demo and a 30-day Ohio pilot. We will deliver clear metrics, transparent governance, and an expansion plan."
+    }
+  ]
+}

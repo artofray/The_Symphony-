@@ -1,0 +1,285 @@
+﻿html, body, #cesiumContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #04070f;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+#toolbar {
+  position: absolute;
+  z-index: 10;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(10, 15, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #eaf2ff;
+}
+
+#modulePanel {
+  position: absolute;
+  z-index: 10;
+  right: 12px;
+  top: 88px;
+  width: 340px;
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+  border-radius: 12px;
+  background: rgba(10, 15, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #eaf2ff;
+  padding: 12px;
+}
+
+#modulePanel h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.panelIntro {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.filterBtn.active {
+  background: rgba(69, 111, 179, 0.95);
+}
+
+#moduleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+#weatherPanel {
+  position: absolute;
+  z-index: 10;
+  left: 12px;
+  top: 138px;
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  border-radius: 12px;
+  background: rgba(10, 15, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #eaf2ff;
+  padding: 12px;
+}
+
+.weatherControls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+#weatherNow {
+  font-size: 13px;
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+#weatherWarnings {
+  display: grid;
+  gap: 8px;
+}
+
+.weatherWarning {
+  border: 1px solid rgba(255, 149, 102, 0.5);
+  background: rgba(107, 38, 24, 0.6);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.weatherWarning strong {
+  color: #ffd2b8;
+  display: block;
+  margin-bottom: 4px;
+}
+
+#weatherUpdated {
+  margin-top: 8px;
+  font-size: 11px;
+  opacity: 0.72;
+}
+
+.weatherLinks {
+  margin-top: 8px;
+}
+
+#gatewayPanel {
+  position: absolute;
+  z-index: 10;
+  left: 12px;
+  bottom: 12px;
+  width: 460px;
+  max-width: calc(100vw - 24px);
+  border-radius: 12px;
+  background: rgba(10, 15, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: #eaf2ff;
+  padding: 12px;
+}
+
+#gatewayPanel.hidden {
+  display: none;
+}
+
+#gatewayPanel h4 {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+}
+
+#gatewayChapterText {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.gatewayControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gatewayVideoNote {
+  margin: 10px 0 0 0;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.gatewayVideoNote a {
+  color: #9cc4ff;
+}
+
+.moduleCard {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(5, 11, 22, 0.72);
+}
+
+.moduleLaunch {
+  margin-top: 6px;
+}
+
+.moduleCard h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+}
+
+.moduleMeta {
+  font-size: 11px;
+  opacity: 0.78;
+  margin-bottom: 6px;
+}
+
+.moduleDesc {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.moduleLinks {
+  display: flex;
+  gap: 8px;
+}
+
+.moduleLinks a {
+  color: #9cc4ff;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.moduleLinks a:hover {
+  text-decoration: underline;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.group.search {
+  flex: 1;
+  min-width: 280px;
+}
+
+button {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(30, 51, 89, 0.8);
+  color: #eaf2ff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: rgba(54, 82, 131, 0.9);
+}
+
+input[type="text"], #cityInput {
+  width: 100%;
+  min-width: 180px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(5, 11, 22, 0.9);
+  color: #fff;
+  border-radius: 8px;
+  padding: 7px 9px;
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+#status {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+@media (max-width: 980px) {
+  #weatherPanel {
+    top: 88px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: 24vh;
+    overflow: auto;
+  }
+
+  #modulePanel {
+    left: auto;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+    width: 330px;
+    max-height: 36vh;
+  }
+
+  #gatewayPanel {
+    width: auto;
+    right: 12px;
+  }
+}

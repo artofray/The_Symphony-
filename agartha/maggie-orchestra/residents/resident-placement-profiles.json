@@ -1,0 +1,65 @@
+{
+  "version": "0.1.0",
+  "profiles": [
+    {
+      "id": "edge-left",
+      "label": "Edge Left",
+      "description": "Dock resident on left edge, low interruption.",
+      "behavior": {
+        "state": "sit",
+        "animation": "idle-breathe",
+        "intent": "quiet-companion"
+      },
+      "ui": {
+        "zone": "left",
+        "x": 0.02,
+        "y": 0.3
+      }
+    },
+    {
+      "id": "edge-right",
+      "label": "Edge Right",
+      "description": "Dock resident on right edge for quick visibility.",
+      "behavior": {
+        "state": "standby",
+        "animation": "attention-pulse",
+        "intent": "quick-intervene"
+      },
+      "ui": {
+        "zone": "right",
+        "x": 0.98,
+        "y": 0.3
+      }
+    },
+    {
+      "id": "browser-porch",
+      "label": "Browser Porch",
+      "description": "Place resident in lower overlay rail as companion.",
+      "behavior": {
+        "state": "build-porch",
+        "animation": "micro-build-loop",
+        "intent": "ambient-constructor"
+      },
+      "ui": {
+        "zone": "bottom",
+        "x": 0.5,
+        "y": 0.92
+      }
+    },
+    {
+      "id": "ambient-builder",
+      "label": "Ambient Builder",
+      "description": "Resident roams ambient scene with subtle activity.",
+      "behavior": {
+        "state": "ambient-walk",
+        "animation": "slow-roam",
+        "intent": "world-growth"
+      },
+      "ui": {
+        "zone": "ambient",
+        "x": 0.65,
+        "y": 0.65
+      }
+    }
+  ]
+}
